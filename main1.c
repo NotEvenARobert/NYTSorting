@@ -18,14 +18,16 @@ const char GAMES[NUMGAMES][MAXSIZE+1] = {
 
 typedef struct Player {
 
-    char* name;
+    char *name;
     int scores[NUMGAMES];
 
 } Player;
 
 int compare(Player *ptrP1, Player *ptrP2, int key);
 void mergeSort(Player **list, int n, int key);
-// ... other prototypes ...
+void insertionSort(Player **list, int low, int high, int key);
+void mergeSortRec(Player **list, int low, int high, int key);
+void mergeSort(Player **list, int n, int key);
 void freeMemory(Player **list, int n);
 
 int main(void) {
@@ -75,16 +77,8 @@ int main(void) {
     int sortKey;
     scanf("%d", &sortKey);
 
-    // --- TODO: Call Sorting Function ---
-    // mergeSort(playerList, n, sortKey); 
-    // We'll add this for main1.c
-    
-    // ... or ...
-    
-    // quickSort(playerList, n, sortKey); 
-    // We'll add this for main2.c
+    mergeSort(playerList, n, sortKey); 
 
-    // --- TODO: Print Output ---
     printf("%s Ranklist\n", GAMES[sortKey]);
     for(int c = 0; c < n; c++) {
 
@@ -95,8 +89,6 @@ int main(void) {
       
     }
 
-
-    // --- TODO: Free Memory ---
     freeMemory(playerList, n);
     return 0;
   
@@ -122,7 +114,97 @@ int compare(Player *ptrP1, Player *ptrP2, int key) {
     
 }
 
+void insertionSort(Player **list, int low, int high, int key) {
+
+    for(int e = low + 1; e <= high; e++) {
+        
+        Player *temp = list[e];
+        int f = e - 1; 
+        while(f >= low && compare(list[f], temp, key) > 0) {
+            
+            list[f + 1] = list[f];
+            f--;
+            
+        }
+        
+        list[f + 1] = temp;
+        
+    }
+    
+}
+
+void mergeSortRec(Player **list, int low, int high, int key) {
+
+    int currentSize = high - low + 1;
+    if(currentSize <= BASECASESIZE) {
+
+        insertionSort(list, low, high, key);
+        return;
+        
+    }
+
+    int mid = (low + high) / 2;
+    mergeSortRec(list, low, mid, key);
+    mergeSortRec(list, mid + 1, high, key);
+
+    Player **temp = (Player**)malloc(currentSize * sizeof(Player*));
+    if(temp == NULL) {
+
+        return; 
+        
+    }
+
+    int g = low;
+    int h = mid + 1;
+    int i = 0;
+    while(g <= mid && h <= high) {
+        
+        if(compare(list[g], list[h], key) <= 0) {
+            
+            temp[i++] = list[g++];
+            
+        } else {
+            
+            temp[i++] = list[h++];
+            
+        }
+        
+    }
+    
+    while(g <= mid) {
+        
+        temp[i++] = list[g++];
+        
+    }
+
+    while(h <= high) {
+        
+        temp[i++] = list[h++];
+        
+    }
+
+    for(int j = 0; j < currentSize; j++) {
+        
+        list[low + j] = temp[j];
+        
+    }
+    
+    free(temp);
+    
+}
+
+void mergeSort(Player **list, int n, int key) {
+
+    if(n > 0) {
+        
+        mergeSortRec(list, 0, n - 1, key);
+        
+    }
+    
+}
+
 void freeMemory(Player **list, int n) {
+    
     for(int d = 0; d < n; d++) {
       
         if(list[d] != NULL) {
