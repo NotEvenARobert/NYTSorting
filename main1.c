@@ -24,7 +24,6 @@ typedef struct Player {
 } Player;
 
 int compare(Player *ptrP1, Player *ptrP2, int key);
-void mergeSort(Player **list, int n, int key);
 void insertionSort(Player **list, int low, int high, int key);
 void mergeSortRec(Player **list, int low, int high, int key);
 void mergeSort(Player **list, int n, int key);
