@@ -40,7 +40,7 @@ int main(void) {
     }
 
     char tempName[MAXSIZE + 2]; 
-    for(int a = 0; a < n; i++) {
+    for(int a = 0; a < n; a++) {
         
         playerList[a] = (Player*)malloc(sizeof(Player));
         if(playerList[a] == NULL) {
@@ -100,6 +100,26 @@ int main(void) {
     freeMemory(playerList, n);
     return 0;
   
+}
+
+int compare(Player *ptrP1, Player *ptrP2, int key) {
+
+    int score1 = ptrP1->scores[key];
+    int score2 = ptrP2->scores[key];
+    if(score1 > score2) {
+        
+        return -1;
+        
+    } else if(score1 < score2) {
+        
+        return 1;
+        
+    } else {
+
+        return strcmp(ptrP1->name, ptrP2->name);
+        
+    }
+    
 }
 
 void freeMemory(Player **list, int n) {
