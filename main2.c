@@ -25,6 +25,7 @@ typedef struct Player {
 } Player;
 
 int compare(Player *ptrP1, Player *ptrP2, int key);
+void insertionSort(Player **list, int low, int high, int key);
 void swap(Player **ptrA, Player **ptrB);
 int partition(Player **list, int low, int high, int key);
 void quickSortRec(Player **list, int low, int high, int key);
